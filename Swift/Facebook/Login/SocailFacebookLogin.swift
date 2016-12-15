@@ -8,7 +8,6 @@
 /* For more help  Defination :-
 
    http://blog.robkerr.com/facebook-integration-with-swift/
-
  
  */
 
@@ -20,12 +19,16 @@ import FacebookCore
 
 import FBSDKLoginKit
 
+
+
+
+
 class SocailFacebookLogin: NSObject , FBSDKLoginButtonDelegate
 {
     // MARK: Outlets
     
    
-    @IBOutlet weak var btnLogin: FBSDKLoginButton!
+    var btnLogin: FBSDKLoginButton!
     
     @IBOutlet weak var lblUserId: UILabel!
     
@@ -47,12 +50,20 @@ class SocailFacebookLogin: NSObject , FBSDKLoginButtonDelegate
 
     func configure(islogin: Bool)
     {
+        
+        btnLogin = FBSDKLoginButton()
+        
+        btnLogin.delegate = self
+        
         self.isLogin = islogin
         
         let permissions : [String] = [FBPermission.public_profile.rawValue, FBPermission.email.rawValue ]
 
          btnLogin.readPermissions = permissions;
         
+        btnLogin.isHidden = true ;
+        
+            
          FBSDKProfile.enableUpdates(onAccessTokenChange: true)
         
         NotificationCenter.default.addObserver(
@@ -97,11 +108,20 @@ class SocailFacebookLogin: NSObject , FBSDKLoginButtonDelegate
             print("\(accessToken)")
             // User is logged in, use 'accessToken' here.
         }
-        
-        
-        
+
     }
   
+    
+    //MARK: Actions 
+    
+    @IBAction func actionFacebook(_ sender: Any)
+    {
+    
+    self.btnLogin.sendActions(for: .touchUpInside)
+    
+    }
+    
+    
      //MARK:  FBSDKLoginButtonDelegate
     
      func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!)
@@ -113,6 +133,13 @@ class SocailFacebookLogin: NSObject , FBSDKLoginButtonDelegate
                 return
                 
             }
+            
+            
+            if ((closureDidLogin) != nil)
+            {
+                closureDidLogin?(result.token )
+            }
+            
             if (self.lblUserName != nil)
             {
                 self.lblUserName.text = result.token.userID

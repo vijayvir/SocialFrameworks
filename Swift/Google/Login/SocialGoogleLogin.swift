@@ -10,14 +10,15 @@ import UIKit
 import GoogleSignIn
 import FirebaseCore
 
+
+
 class SocialGoogleLogin: NSObject , GIDSignInUIDelegate,GIDSignInDelegate
 {
 
     
     // MARK: Outlets
     
-    
-    @IBOutlet weak var btnLogIn: GIDSignInButton!
+     var btnLogIn: GIDSignInButton!
     
     @IBOutlet weak var statusText: UILabel!
     
@@ -51,7 +52,12 @@ class SocialGoogleLogin: NSObject , GIDSignInUIDelegate,GIDSignInDelegate
     
     func configure(islogin: Bool)
     {
+        btnLogIn = GIDSignInButton()
+        
         self.isLogin = islogin
+        
+          btnLogIn.isHidden = true
+        
         GIDSignIn.sharedInstance().uiDelegate = self
         GIDSignIn.sharedInstance().delegate = self
         // Uncomment to automatically sign in the user.
@@ -97,6 +103,15 @@ class SocialGoogleLogin: NSObject , GIDSignInUIDelegate,GIDSignInDelegate
 
     
     // MARK: Actions
+    
+
+    @IBAction func actionGoogle(_ sender: Any) {
+        
+        self.btnLogIn.sendActions(for: .touchUpInside)
+        
+    }
+    
+    
     @IBAction func didTapSignOut(sender: AnyObject) {
         GIDSignIn.sharedInstance().signOut()
         // [START_EXCLUDE silent]
@@ -132,7 +147,7 @@ class SocialGoogleLogin: NSObject , GIDSignInUIDelegate,GIDSignInDelegate
         
             if btnLogIn != nil
             {
-                 btnLogIn.isHidden = true
+                // btnLogIn.isHidden = true
             }
             
             if btnSignOut != nil
@@ -151,7 +166,7 @@ class SocialGoogleLogin: NSObject , GIDSignInUIDelegate,GIDSignInDelegate
             
             if btnLogIn != nil
             {
-                   btnLogIn.isHidden = false
+                   //btnLogIn.isHidden = false
             }
             
             if btnSignOut != nil
